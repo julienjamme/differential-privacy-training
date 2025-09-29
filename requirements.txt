@@ -1,0 +1,14 @@
+opendp[polars]
+openpyxl
+cvxpy
+seaborn
+polars
+plotly
+pandas
+PyYAML
+numpy
+matplotlib
+smartnoise-sql
+geopandas
+# smartnoise-synth
+# pip install -r requirements.txt
