@@ -284,3 +284,77 @@ marginals are computed and privatized by DP.
 Pet federated ML (-> Eurostat)
 Joconde Project
 
+
+## Differential Privacy
+
+Membership / Inference Attack 
+
+Abolute anonymaization is a broken promise
+We can use the likelihood of data
+
+Uncertain identification cannot be prevented but can be made uncertain !
+Even uncertain identification disclosure can be harmful because of inference attack => limit the ability to infer sensitive data
+
+### Definition and Properties of DP
+
+vulnerability of conventional disclosure control techniques to linkage and reconstruction and membership attacks
+
+#### Objectives of a successful SDC technique
+
+1. indivdual data protection
+2. Guarantees independent of auxiliary information and techncal capabilities
+3. Cumulative risk quantification to decide when to stop disclosing information
+
+=> DP satisfies the three criteria (ils sont faits pour ça)
+
+#### Randomizer computation
+
+A layer is added to the information flow = randomization
+
+#### DP principle
+
+All DP private algo are random  BUT not all random algo are DP
+DP rand.: result of query + Noise
+Privacy loss parameter to do the privacy / utility trade-off.
+
+
+*Adjacent Databases*
+Math definition (likelihood ratio is bounded by $e^\varepsilon$) => first crireria satisfied (individual data protection) => quantify how much statistical on adjacent databases can be distinguished
+From DP perspective, the randomness is only on the noise.
+So it is conditionally to the data collected.
+
+represntation of the likelihood ratio as the ratio of the noise density. 
+DP controls the maximal distinguisability power between these two models of random variables. 
+
+
+*Post-processing*: the DP guarantees are preserved to any post processing analysis even using auxiliary information. => Second criteria
+Worst case scenario = know everything but the target.
+
+*Composition*: overall DP budget must be tracked => third criteria
+independance comes from independent noise addition
+
+### Laplacian Mechanism
+
+Scale of the noise has to be equal sensitivity / epsilon.
+
+Sensititivity = max difference between query on D and query on D' (D and D' adjacent)
+The scale of the noise is adapted both to the nature of the query and the nature of the data.
+
+Example: query of mean on binary values => sensitivity = 1/n where n is the number of individuals.
+=> practical to release percentages.
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Laplace Noise Addition
+
+
