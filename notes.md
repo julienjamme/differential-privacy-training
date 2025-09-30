@@ -103,6 +103,184 @@ Anonymization = transformation of data in a way such that people can no longer b
 Pseudonymization = processing of personal data in such a way that data can no longer be attributed to a specific data subject (without the use of additional)
 
 
+## Tools
+
+- *OpenDP*
+- *DP-SDG*
 
 
+- `env | grep GIT` : to get GIT environment variables 
+- `env | grep AWS` : to get AWS environment variables (credentials to connect to s3 storage)
+
+`python -m http.server -d slides/ -b 0.0.0.0 5000` : to publish slides on a url (enable before diffusion on several )
+- 0.0.0.0 (local url)
+- 5000 (port)
+
+
+## PETS
+
+How to choose the right combination f input and pricy output.
+
+- where and why PETS can be used by NSO
+- high level understanding 
+- how to find relevant combination of PETs
+
+
+### Definition
+
+PETs = tools that permit data processing and analysis while protecting the confidentiality of collected data or derived data throughout the data flow
+
+
+Two types of techno: Input Privacy techno vs Output Privacy techno
+
+Information flow and stakeholders :
+Source data (people/companies) -> collected by an input party (NSI eg) -> transfered by computing parties (computing services, data centers, sovereign or cloud) -> analyzed and disseminated to the result party  (public society, legally bounds)
+
+Ensure confidentiality along this flow of info.
+
+*Input privacy techno*: multiple parties can execute computation tasks without exposing the input data to each other (eg Security)
+
+*Output privacy techno*: modify the output that produces an output to limit disclosure afetr (eg: SDC)
+
+Who do you trust ?
+
+Input parties / Computing arties / Results parties ?
+
+- Output privacy: No trust on results parties but trust for computing and Input parties (classical SDC for NSI)
+- The source does not trust the other parties (ex personal mobile data)
+- Input privacy: the input privacy doesn't trust the computing parties (for example release data on cloud services): make sure that the computing party can't attack the data
+
+- multiple parties : make sure that each party can't see the other's data but compute on both
+(cas de RESIL)
+
+Output privacy: trust scheme for public administration, but mmake sure that the result parties can't attack the data. 
+
+What is THE solution ? privacy is complex / context dependent => no silver bullet PET.
+
+### Input privacy 
+
+More security topic
+
+#### Secure enclaves 
+
+Input -> encrypted transmission to the compute party -> decrypted when on the storage -> computation -> storage -> encryption for transfer to the input party 
+
+The storage is also encrypted: the only access to data is only via the computation.
+
+The Secure enclave is composed by the storage and computation party that are totally isolated to the input party.
+
+ensures:
+- input privacy
+- code privacy
+- code assurance
+- all algo can be performed
+- easy to deploy
+
+But:
+- truts in the hardware (but possibility of physical attacks)
+- no formal privacy security guarantee
+
+PET Guide of UN
+
+Example: Different Mobile Network Providers don't trust each other but use an isolated computation environment that the ministry of tourism can used to publish some results (Indonesia)
+
+#### Homomorphic encryption
+
+The step of decryption is skipped and an end to end encryption is preferred.
+The data and the operation on them are protected.
+
+ensures:
+- formal guarantees against security breach
+- allowing to external computing 
+
+limits:
+- computational costs are exponential (=> limited on simple calculations )
+
+Example from Canada:
+Stat Can performs some model with Homorphic encryption : > 2500 fois plus de temps
+
+Very lively research on this field
+
+#### Secure Multi party Data Analysis Pipeline
+
+cryptographic techno that allows two or more mutually distrusting parties to compute an agreed function
+
+Ensures:
+- mature techno 
+- formal proofs of security
+- very active community
+
+Limits:
+- susceptible of collusion
+- expert knowledge needed for each algo
+- often private companies owned the solution (not so open source)
+
+
+Example: from US
+Two national data providers on students data (they can't share the data to each other by law) : use security multiparty  to make statistics on the intersection of the two datasets.
+
+#### Distributed Learning / Federal Learnin
+
+One ML algo to be trained from different sources data 
+train the data without sharing the data 
+
+ensures:
+- no need to share
+
+limits:
+- do not prevent personal data leak through trained ML
+- trained model with federal learning are less performant
+
+
+### Output privacy 
+
+Differential Privacy = framework to transform the data while monitoring confidentiality/utility trade-off by randomizing the output of an algo
+
+ensures:
+- formal mathematical guarantee on disclosure risk
+- many scientific works on DP-algo
+
+BUT:
+- choose the noise scale
+- production implementation could be difficult (need of tailored standard solutions)
+
+Example: LOMAS used to make experimentation 
+Federal IT infrastructure : Swiss Researchers provide analysis plan applied directly on the real data but the results are DP protected. (need DP algo available)
+
+
+#### Local DP
+
+The DP is applied directly on the data collected (Randomized Response)
+
+Ensures:
+- data at individual level cannot be used against its owner
+- early protection reduces the need for input privacy
+
+Example: Mobile DATA (US cloud act): data partially randomized
+Apple: quicktype = learns words that users type more often
+The data sent are not raw data but partially randomized 
+Health Kit App uses also local DP.
+
+
+#### Synthetic Data
+
+1. Simulate Dataset with the same data type (reproduce only the metadata of the dataset) => Dummy dataset
+2. Create a new dataset with similar statistical properties without revealing information 
+
+ensures:
+- produce confidential microdata (pas sûr)
+- dissemination and usability readiness
+
+but:
+- not formal proof 
+- one synthetic dataset 
+
+Example UH 2021 Census
+Dummy Census to test their pipelines (Synthetizer + Differential Privacy)
+marginals are computed and privatized by DP.
+
+### Put everything together
+
+Pet federated ML (-> Eurostat)
+Joconde Project
 
