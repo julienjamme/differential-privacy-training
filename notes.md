@@ -445,5 +445,10 @@ Steps:
 2. Compute DP-queries
     - DP-counts for categorical variables
     - DP-means and DP-variances of numercial variables (crossed by categorical variables if needed)
-3. Generate data using statistical model:
+3. Generate data using statistical model
+
+Complex modelisation is possible: for example nested hierarchical models
+
+See NIST Synthetic Data Challenge
+
 
