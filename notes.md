@@ -318,10 +318,13 @@ DP rand.: result of query + Noise
 Privacy loss parameter to do the privacy / utility trade-off.
 
 
-*Adjacent Databases*
+*Adjacent Databases* (there are many ways to define adjacency)
 Math definition (likelihood ratio is bounded by $e^\varepsilon$) => first crireria satisfied (individual data protection) => quantify how much statistical on adjacent databases can be distinguished
 From DP perspective, the randomness is only on the noise.
 So it is conditionally to the data collected.
+
+- for example group adjacency => group DP (distance between D and D')
+- for example adjacency set not to one but 10 or other => the formula of DP is 
 
 represntation of the likelihood ratio as the ratio of the noise density. 
 DP controls the maximal distinguisability power between these two models of random variables. 
@@ -343,18 +346,104 @@ The scale of the noise is adapted both to the nature of the query and the nature
 Example: query of mean on binary values => sensitivity = 1/n where n is the number of individuals.
 => practical to release percentages.
 
+Use case from Swiss: dashboard with statistics by canton on health data but sensitivity => use the DP to let the dashboard
+Objective: query = evolution over time of the number of covid cases
+
+Query: count of covid cases = nb rows in the dataset by canton 
+Value: between 0 and number of people living at one moment in Swiss
+Sensitivity: number of times a guy has covid in the period considered.
+Parameters of Laplace: 0, sigma = sensitivity/epsilon
+
+
+### PBS of lower and upper bounds => three ways to do:
+1. Consider bounds as public metadata (to use when if it is possible)
+2. Compute bounds with DP
+3. Use clamping (censor the data)
+
+Clamping simple and efficient but introduces some bias.
+
+Likelihood ratio of gaussian density is unbounded.
+
+
+### Gaussian Mechanism
+
+Approximate DP: we make the DP propriety true in probability
+So the likelihood ratio is bounded by $e^\varepsilon$ with a probability of at least $1-\delta$.
+
+3 criteria are ok (composition $\varepsilon$ et $\delta$ s'ajoutent).
+
+Prefer Gaussian than Laplacian Mechanism:
+
+- Composition theorem shows that Gaussian is better with large number queries
+    - linear growth of budget with Laplace
+    - sublinear growth of budget with Gaussian
+- Simpler utility analysis => with gauss we assess the quality of data with classical tools.
+
+### Exponential Mechanism
+
+for quantile.
+
+- sensitivity (technically speaking) is the same as the mean
+- but quantile are less sensitive to outliers than the average
+
+=> compute quantiles without having such sensitivity -> exponential mechanism.
+
+Scoring function on which the sensitivity is computed.
+uniform draw of a value between two candidates chosen.
+
+
+## Learning outcomes
+
+objective = minimize the loss function
+Classical technic to solve the pb = SGD 
+
+there is a disclosure risk because the model uses the data to compute the solution.
+=> the data can be extracted directly from model parameters if disseminated (example models running on individual's device)
+or if the model is query-able by a user.
+
+Applying DP on ML:
+
+1. protect the final estimated parameters (add noise to linear regression weights)
+2. Protect the data during the training process (add noise to the gradient update during SDG)
+
+Adjacent datasets: if they differ in a single netry that is if ane image-label spair is present in D but not in D'.
+
+So the influence of an individual entry is bounded during the training process.
+
+=> Modification of the SDG to make it DP-SDG.
+Actually the gradient is clipped if it is too big at one step.
+This clamping doesn't inject some bias into the learning 
+Then (gaussian) noise is injected in the gradient.
+
+The sigma of the noise has to be greater than a coef depending on epsilon, delta, the bound of clamping and N.
+
+Remark: the choice of the epsilon parameter is quite tricky: what is the good order => see literature.
+The scaling of the data can let spend less confidentiality budget, even spending budget for computing the mean and the variance of each variables.
+
+The DP version of ML algorithm are available on Python with tensorflow.
+
+The notion of privacy unit is depending on the type of data (text, images, tabular etc.).
+AI ACT of EU.
 
 
 
+## Synthetic Data Generation
 
+Dummy data vs Synthetic data
+Dummy data = metadata + random
+Synthetic data = Data + generation model
 
+1. privacy guarantees are in general empirical (for example matches with real data)
+2. private synthetic dataset can't be used for all purposes 
 
+empirical metrics to assess utility are pbtic in risk point of view because they depend on only one generation dataset, so they can't measure the potential risk of disclosure 
 
+An all purpose synthetic dataset is equivalent to infinite nulber of query => DP with infinite budget.
 
-
-
-
-
-### Laplace Noise Addition
-
+Steps:
+1. Define purpose = set of the relevant queries (counts, sums, means by categorical variables)
+2. Compute DP-queries
+    - DP-counts for categorical variables
+    - DP-means and DP-variances of numercial variables (crossed by categorical variables if needed)
+3. Generate data using statistical model:
 
