@@ -452,3 +452,136 @@ Complex modelisation is possible: for example nested hierarchical models
 See NIST Synthetic Data Challenge
 
 
+## Local DP
+
+When The source data doesn't trust the curator of the data 
+ex input party is a GAFAM // sensitive topics during surveys
+
+with local DP, the data collector can't be sure about the right answer of an individual respondent.
+
+Protection against governmental agencies: ex against Cloud Act that lets the US requesting individual data.
+=> with the randomization, the collected answers can't be used against the respondents.
+
+Randomized Response are not new (1965) and actually satisfies already the $\varepsilon$-DP.
+RR are a protection method at the cost of having unreliable individual response.
+But if the mechanism is known, accurate estimations can be done at the population level.
+
+The naive estimator of the proportion is unbiased but easy to get an unbiased estimator.
+Variance of the unbiased estimator is greater than the variance of the estimator without RR.
+So we loose accuracy, but we can get a targeted accuracy by taking sample enough large.
+
+playing with the probability of the mechanism is leading to different privacy guarantee (p greater so privacy guarantee lesser).
+
+## Secondary Use of Data for Research
+
+Traditional process (<-> FPR) for researchers to get data: needs of lawyers, prepartors of data etc. and it is not scalable, data protection relies on their responsibility => reputational risk.
+
+Remote ACcess (<-> CASD): lower security risk, the potential breaches concern only the security of the data center, not dependent of other's data center security. scalability is not reachable. and there are some disclosure risks in the outputs => burden
+
+LOMAS = Eyes-Off Data Science:
+Remote access but the algorithm is send to LOMAS (platform) that makes some tests and runs the algorithm by ensuring the confidentiality of the data.
+scalability / minimal human intervention / => but need to quantify and track disclosure risks.
+
+Run The actual version of lomas with Python 3.12.7
+
+Lomas lets track the privacy loss budget to make sure that the global budget is not reached.
+
+Reproducibility:
+- Nois addition can be taken into account in the experiment
+- numbers are not reproducible but conclusions are (if providing inference tools)
+
+- the researchers are allowed to have access to unnoisy results (but only noisy ones are released/published) !
+
+The global budget is the result of a discussion with researchers: which precision they want on their results => budget.
+
+## privacy-utility trade-off
+
+From EU rule, about anonymization: 
+- Anonymization is binary and must be irreversible.
+(broken promise)
+
+legal definition of the anonymization is implictly risk based through notion of reasonable efforts.
+IT actually relies on risk analysis
+
+adoption of DP (benefits: formal guarantees / protection against exact identification / trade-off in one parameter) has limited uses because of its complexity of implementation (tools are not so many) and lack of interpretability of it. 
+Choosing epsilon is a gouvernance decision.
+
+Two "frameworks"
+- privacy first: define first the risk acceptable limit and find the best reachable utility 
+- utility first: define first the wanted precision and find the maximal privacy protection that can be garanteed.
+
+Interpretability of the privacy loss budget:
+- use the randomized response to make an analogy
+
+Utility assessment 
+- classical approach = use of empirical metrics
+    - empirical metrics only give info on what is measured.
+    - confidence interval are interesting
+
+=> suggestion: rely on testing hypothesis
+
+### Privacy first 
+
+How to deal with privacy first through the lense of testing hypothesis ?
+
+Mathematical framework allowing to draw conclusion under uncertainty.
+Comparison of 2 hypothesis: $H_0$ vs $H_1$.
+
+H0: ALice is part of a sensitive group of the population
+H1 : ALice is not part of a sensitive group of the pop
+
+=> with testing these hypothesis, we can monitor the ineference attack
+
+Plays with Type 1 and Type 2 errors.
+Type 1: attacker conclude that Alice is sensitive but she's not
+Type 2: attacker concludes that Alice is not sensitive but she is.
+
+If the two types of error are very smmal in the same time si the confidence of attackers is very high.
+
+Use of ROC curves (1-beta depending on alpha): how small beta can be with alpha given ?
+Where 1-beta is the power of the test.
+The idea is to have the greater power 
+
+=> $f$-diff-privacy: what is the best membership attack that can be achievable ?
+lien entre f et epsilon = privacy loss budget (similar to eps-DP)
+higher the budget higher the roc curve
+
+Applied with Laplace
+Apliied with gaussian noise (don't need the delta parameter)
+
+Example of uniform random sampling => actually blatantly non private and the ROC Curve here is not useful. 
+
+
+#### How the confidence of thee attacker can be increased by using DP protected data ?
+
+role of prior knowledge in the leakage.
+Use of bayesian statistics.
+
+Maximal relative risk = maximum increase in confidence about a re-reidentification due to the dissemination of the protected results.
+there is a link between privacy loss budget and the maximal relative risk.
+
+#### Choosing the parameters
+
+1. ar blatant disclosure acceptable ? (yes or no)
+2. Is it membership attacks to achieve arbitrarily high confidence ? 
+    - yes then maximum relative risk is infinity
+    - no then maximum relative risk has to be bounded.
+
+Gaussian mechanism for example is a mechanism with none balatant disclosure but with infinite relative risk.
+3. Set the max torelable disclosure risk
+4. CAn the relative risk be multiplied by R ?
+
+### Utility first
+
+Use hypothesis tests on a specific result.
+
+=> take into account all the sources of randomness.
+
+
+
+
+p + p(1-p)
+
+
+
+
